@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <title>Filtros LinkedIn</title>
+ <style>
+  body {
+   width: 220px;
+   font-family: Arial, sans-serif;
+  }
+
+  label,
+  input {
+   display: block;
+   margin: 5px 0;
+  }
+
+  input {
+   width: 100%;
+   padding: 5px;
+   box-sizing: border-box;
+  }
+
+  button {
+   width: 100%;
+   padding: 5px;
+  }
+ </style>
+</head>
+
+<body>
+ <h3>Configurar Filtros</h3>
+ <label>
+  <input type="checkbox" id="enableFilter"> Habilitar filtro
+ </label>
+ <label for="regexLang">Regex Idioma (Inglés):</label>
+ <input type="text" id="regexLang" placeholder="Ej: remote|developer">
+ <label for="regexSalary">Regex Salario:</label>
+ <input type="text" id="regexSalary" placeholder="Ej: \$\d{2,}">
+ <label for="highlightKeyword">Palabra a resaltar:</label>
+ <input type="text" id="highlightKeyword" placeholder="Ej: inglés">
+ <button id="save">Guardar</button>
+ <script src="popup.js"></script>
+</body>
+
+</html>
+The popup.js file contains the following code:
