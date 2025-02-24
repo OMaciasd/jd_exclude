@@ -1,47 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
- <title>Filtros LinkedIn</title>
- <style>
-  body {
-   width: 220px;
-   font-family: Arial, sans-serif;
-  }
-
-  label,
-  input {
-   display: block;
-   margin: 5px 0;
-  }
-
-  input {
-   width: 100%;
-   padding: 5px;
-   box-sizing: border-box;
-  }
-
-  button {
-   width: 100%;
-   padding: 5px;
-  }
- </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="LinkedIn Filters">
+    <meta name="author" content="Daniel García">
+    <meta name="keywords" content="LinkedIn, Filters, Chrome Extension, Edge Extension">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0073b1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>LinkedIn Filters</title>
+    <link rel="stylesheet" href="popup.css">
 </head>
-
 <body>
- <h3>Configurar Filtros</h3>
- <label>
-  <input type="checkbox" id="enableFilter"> Habilitar filtro
- </label>
- <label for="regexLang">Regex Idioma (Inglés):</label>
- <input type="text" id="regexLang" placeholder="Ej: remote|developer">
- <label for="regexSalary">Regex Salario:</label>
- <input type="text" id="regexSalary" placeholder="Ej: \$\d{2,}">
- <label for="highlightKeyword">Palabra a resaltar:</label>
- <input type="text" id="highlightKeyword" placeholder="Ej: inglés">
- <button id="save">Guardar</button>
- <script src="popup.js"></script>
-</body>
+    <h3>LinkedIn Filters</h3>
 
+    <form id="filterForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter a name">
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" placeholder="Enter a location">
+
+        <label for="company">Company:</label>
+        <input type="text" id="company" placeholder="Enter a company name">
+
+        <label for="position">Position:</label>
+        <input type="text" id="position" placeholder="Enter a job title">
+
+        <button type="submit" id="applyFilters">Apply Filters</button>
+    </form>
+
+    <script src="popup.js"></script>
+</body>
 </html>
-The popup.js file contains the following code:

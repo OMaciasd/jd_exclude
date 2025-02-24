@@ -1,57 +1,78 @@
-console.log("🔎 LinkedIn Job Filter is running...");
+console.log('🔎 LinkedIn Job Filter is running...')
 
-// Cargar filtros y verificar si el usuario activó el filtrado
-chrome.storage.local.get(["regexLang", "regexSalary", "highlightKeyword", "filterEnabled"], (data) => {
- if (!data.filterEnabled) {
-  console.log("❌ Filtro desactivado.");
-  return; // No ejecutar el script si el usuario lo desactivó
- }
+// Cargar filtros guardados por el usuario
+chrome.storage.local.get(
+  [
+    'regexLang',
+    'regexSalary',
+    'highlightKeyword',
+    'excludeCompanies',
+    'excludeContractTypes'
+  ],
+  data => {
+    let regexEnglish = new RegExp(
+      data.regexLang ||
+        '\\b(remote|developer|engineer|manager|full time|contract|internship)\\b',
+      'i'
+    )
+    let highlightKeyword = data.highlightKeyword || 'inglés'
 
- const regexEnglish = new RegExp(
-  data.regexLang || "\\b(remote|developer|engineer|manager|full time|contract|internship)\\b", "i"
- );
- const highlightKeyword = data.highlightKeyword || "inglés";
- const regexSalary = new RegExp(
-  data.regexSalary || "\\b(\\$|€)?\\d{1,3}(,\\d{3})*(\\.\\d{1,2})?(K|k|M|m|mil|millón|anual|mes)\\b", "i"
- );
+    let regexSalary = new RegExp(
+      data.regexSalary ||
+        '\\b(\\$|€)?\\d{1,3}(,\\d{3})*(\\.\\d{1,2})?(K|k|M|m|mil|millón|anual|mes)\\b',
+      'i'
+    )
 
- function filterJobs() {
-  let jobPosts = document.querySelectorAll(".jobs-search-results__list-item, .jobs-search-results-list__list-item");
+    let excludeCompanies = data.excludeCompanies || []
+    let excludeContractTypes = data.excludeContractTypes || []
 
-  jobPosts.forEach((post) => {
-   let text = post.innerText || post.textContent;
+    function filterJobs () {
+      let jobPosts = document.querySelectorAll(
+        '.jobs-search-results__list-item'
+      )
 
-   let isEnglish = regexEnglish.test(text);
-   let containsKeyword = new RegExp(`\\b${highlightKeyword}\\b`, "i").test(text);
-   let hasSalary = regexSalary.test(text);
+      jobPosts.forEach(post => {
+        let text = post.innerText || post.textContent
 
-   // Ocultar si la oferta está en inglés
-   if (isEnglish) {
-    post.style.display = "none";
-    return;
-   }
+        let isEnglish = regexEnglish.test(text)
+        let containsKeyword = new RegExp(`\\b${highlightKeyword}\\b`, 'i').test(
+          text
+        )
+        let hasSalary = regexSalary.test(text)
 
-   // Ocultar si menciona salario
-   if (hasSalary) {
-    post.style.display = "none";
-    return;
-   }
+        // Verificar si la empresa está en la lista de exclusión
+        let isExcludedCompany = excludeCompanies.some(company =>
+          text.includes(company.trim())
+        )
 
-   // Resaltar si está en español y menciona "inglés"
-   if (containsKeyword) {
-    post.style.backgroundColor = "yellow";
-    post.style.fontWeight = "bold";
-   }
-  });
- }
+        // Verificar si el tipo de contrato está en la lista de exclusión
+        let isExcludedContract = excludeContractTypes.some(contract =>
+          text.includes(contract.trim())
+        )
 
- let observer = new MutationObserver(() => {
-  filterJobs();
- });
+        // Ocultar si menciona salario
+        if (hasSalary || isExcludedCompany || isExcludedContract) {
+          post.style.display = 'none'
+        }
+        // Ocultar si está en inglés
+        else if (isEnglish) {
+          post.style.display = 'none'
+        }
+        // Resaltar si está en español y menciona "inglés"
+        else if (containsKeyword) {
+          post.style.backgroundColor = 'yellow'
+          post.style.fontWeight = 'bold'
+        }
+      })
+    }
 
- observer.observe(document.body, { childList: true, subtree: true });
+    let observer = new MutationObserver(() => {
+      filterJobs()
+    })
 
- setTimeout(filterJobs, 2000);
-});
+    observer.observe(document.body, { childList: true, subtree: true })
 
-
+    // Filtrar inicialmente después de la carga
+    setTimeout(filterJobs, 2000)
+  }
+)

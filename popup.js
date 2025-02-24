@@ -1,27 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
- const regexLangInput = document.getElementById("regexLang");
- const regexSalaryInput = document.getElementById("regexSalary");
- const highlightKeywordInput = document.getElementById("highlightKeyword");
- const enableFilterCheckbox = document.getElementById("enableFilter");
- const saveButton = document.getElementById("save");
+document.getElementById("save").addEventListener("click", () => {
+ const regexLang = document.getElementById("regexLang").value;
+ const regexSalary = document.getElementById("regexSalary").value;
+ const highlightKeyword = document.getElementById("highlightKeyword").value;
+ const excludeCompanies = document.getElementById("excludeCompanies").value.split(",");
+ const excludeContractTypes = document.getElementById("excludeContractTypes").value.split(",");
 
- // Cargar configuraciones guardadas
- chrome.storage.local.get(["regexLang", "regexSalary", "highlightKeyword", "filterEnabled"], (data) => {
-  if (data.regexLang) regexLangInput.value = data.regexLang;
-  if (data.regexSalary) regexSalaryInput.value = data.regexSalary;
-  if (data.highlightKeyword) highlightKeywordInput.value = data.highlightKeyword;
-  enableFilterCheckbox.checked = data.filterEnabled ?? true; // Activado por defecto
- });
-
- saveButton.addEventListener("click", () => {
-  chrome.storage.local.set({
-   regexLang: regexLangInput.value,
-   regexSalary: regexSalaryInput.value,
-   highlightKeyword: highlightKeywordInput.value,
-   filterEnabled: enableFilterCheckbox.checked
-  }, () => {
-   alert("Filtros guardados correctamente.");
-  });
+ chrome.storage.local.set({
+   regexLang,
+   regexSalary,
+   highlightKeyword,
+   excludeCompanies,
+   excludeContractTypes
  });
 });
-
