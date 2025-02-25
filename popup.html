@@ -3,35 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="LinkedIn Filters">
-    <meta name="author" content="Daniel García">
-    <meta name="keywords" content="LinkedIn, Filters, Chrome Extension, Edge Extension">
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="theme-color" content="#0073b1">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>LinkedIn Filters</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <h3>LinkedIn Filters</h3>
-
+    <h2>LinkedIn Filters</h2>
     <form id="filterForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Enter a name">
+        <label>
+            <input type="checkbox" id="includeEnglish"> Include English Jobs
+        </label>
 
-        <label for="location">Location:</label>
-        <input type="text" id="location" placeholder="Enter a location">
+        <!-- Toggle Switch -->
+        <div class="toggle-container">
+            <label class="toggle-switch">
+                <input type="checkbox" id="advancedMode" class="toggle-switch">
+                <span class="slider"></span>
+                <span class="toggle-label">Modo Avanzado</span>
+            </label>
+        </div>
 
-        <label for="company">Company:</label>
-        <input type="text" id="company" placeholder="Enter a company name">
+        <!-- Opciones avanzadas (inicialmente ocultas) -->
+        <div id="advancedOptions" class="hidden">
+            <label for="regexSalary">Regex Salario:</label>
+            <input type="text" id="regexSalary" placeholder="Ej: \\b(\\$|€)?\\d{1,3}K\\b">
 
-        <label for="position">Position:</label>
-        <input type="text" id="position" placeholder="Enter a job title">
+            <label for="excludeCompanies">Excluir Empresas:</label>
+            <input type="text" id="excludeCompanies" placeholder="Ej: Google, Amazon">
 
-        <button type="submit" id="applyFilters">Apply Filters</button>
+            <label for="excludeContractTypes">Excluir Contratos:</label>
+            <input type="text" id="excludeContractTypes" placeholder="Ej: Internship, Part-time">
+        </div>
+
+        <div class="toggle-container">
+            <label class="toggle-switch">
+                <input type="checkbox" id="showFilters" class="toggle-switch">
+                <span class="slider"></span>
+                <span class="toggle-label">Mostrar Filtros</span>
+            </label>
+        </div>
+
+        <!-- Botón de aplicar filtros -->
+        <br>
+        <button type="submit">Apply Filters</button>
     </form>
-
     <script src="popup.js"></script>
 </body>
 </html>

@@ -2,19 +2,13 @@
  "manifest_version": 3,
  "name": "LinkedIn Job Filter",
  "version": "1.0",
- "description": "Filtra empleos en LinkedIn según idioma, salario y ubicación.",
+ "description": "Filters LinkedIn jobs based on language, salary, and location.",
  "permissions": [
   "storage"
  ],
  "host_permissions": [
   "https://www.linkedin.com/*"
  ],
- "background": {
-  "scripts": [
-   "background.js"
-  ],
-  "persistent": false
- },
  "content_scripts": [
   {
    "matches": [
@@ -22,7 +16,8 @@
    ],
    "js": [
     "content.js"
-   ]
+   ],
+   "run_at": "document_idle"
   }
  ],
  "action": {
