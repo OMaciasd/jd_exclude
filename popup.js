@@ -1,35 +1,34 @@
 document.addEventListener('DOMContentLoaded', function () {
     const advancedModeToggle = document.getElementById('advancedMode');
-    const advancedOptions = document.getElementById('advancedOptions');
+    const advancedFilters = document.getElementById('advancedFilters');
 
-    // Cargar estado del toggle desde storage
-    chrome.storage.local.get('advancedMode', data => {
+    // Cargar estado del Modo Avanzado
+    chrome.storage.local.get(['advancedMode'], data => {
         if (data.advancedMode) {
             advancedModeToggle.checked = true;
-            advancedOptions.classList.remove('hidden');
+            advancedFilters.classList.remove('hidden');
         }
     });
 
-    // Mostrar/ocultar opciones avanzadas
+    // Activar/Desactivar los filtros avanzados al cambiar el toggle
     advancedModeToggle.addEventListener('change', function () {
         if (this.checked) {
-            advancedOptions.classList.remove('hidden');
+            advancedFilters.classList.remove('hidden');
         } else {
-            advancedOptions.classList.add('hidden');
+            advancedFilters.classList.add('hidden');
         }
         chrome.storage.local.set({ advancedMode: this.checked });
     });
 
-    // Guardar filtros en almacenamiento local al aplicar
+    // Guardar filtros cuando se aplica
     document.getElementById('filterForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
         chrome.storage.local.set({
             includeEnglish: document.getElementById('includeEnglish').checked,
-            regexSalary: document.getElementById('regexSalary').value,
-            excludeCompanies: document.getElementById('excludeCompanies').value.split(',').map(s => s.trim()),
-            excludeContractTypes: document.getElementById('excludeContractTypes').value.split(',').map(s => s.trim()),
-            advancedMode: advancedModeToggle.checked
+            advancedMode: advancedModeToggle.checked,
+            company: document.getElementById('company').value,
+            position: document.getElementById('position').value
         });
 
         alert('Filters applied!');

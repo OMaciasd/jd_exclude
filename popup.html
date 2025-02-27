@@ -8,44 +8,33 @@
 </head>
 <body>
     <h2>LinkedIn Filters</h2>
+
     <form id="filterForm">
         <label>
             <input type="checkbox" id="includeEnglish"> Include English Jobs
         </label>
 
-        <!-- Toggle Switch -->
-        <div class="toggle-container">
-            <label class="toggle-switch">
-                <input type="checkbox" id="advancedMode" class="toggle-switch">
-                <span class="slider"></span>
-                <span class="toggle-label">Modo Avanzado</span>
+        <!-- Toggle para activar Modo Avanzado -->
+        <fieldset class="toggle-container" aria-label="Advanced Mode Toggle">
+            <span>Modo Avanzado</span>
+            <label class="toggle-switch" for="advancedMode">
+                <input type="checkbox" id="advancedMode">
+                <span class="slider" aria-hidden="true"></span>
             </label>
+        </fieldset>
+
+        <!-- Filtros adicionales (ocultos por defecto) -->
+        <div id="advancedFilters" class="hidden">
+            <label for="company">Company:</label>
+            <input type="text" id="company" placeholder="Enter a company name">
+
+            <label for="position">Position:</label>
+            <input type="text" id="position" placeholder="Enter a job title">
         </div>
 
-        <!-- Opciones avanzadas (inicialmente ocultas) -->
-        <div id="advancedOptions" class="hidden">
-            <label for="regexSalary">Regex Salario:</label>
-            <input type="text" id="regexSalary" placeholder="Ej: \\b(\\$|€)?\\d{1,3}K\\b">
-
-            <label for="excludeCompanies">Excluir Empresas:</label>
-            <input type="text" id="excludeCompanies" placeholder="Ej: Google, Amazon">
-
-            <label for="excludeContractTypes">Excluir Contratos:</label>
-            <input type="text" id="excludeContractTypes" placeholder="Ej: Internship, Part-time">
-        </div>
-
-        <div class="toggle-container">
-            <label class="toggle-switch">
-                <input type="checkbox" id="showFilters" class="toggle-switch">
-                <span class="slider"></span>
-                <span class="toggle-label">Mostrar Filtros</span>
-            </label>
-        </div>
-
-        <!-- Botón de aplicar filtros -->
-        <br>
         <button type="submit">Apply Filters</button>
     </form>
+
     <script src="popup.js"></script>
 </body>
 </html>

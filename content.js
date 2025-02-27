@@ -79,3 +79,38 @@ chrome.storage.local.get([
   // Aplicar filtro después de cargar la página
   setTimeout(filterJobs, 2000);
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Mensaje recibido en content script:", request);
+  if (request.message === "open_new_tab") {
+    console.log("Abrir nueva pestaña...");
+  }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Mensaje recibido en content script:", request);
+  if (request.message === "open_new_tab") {
+    console.log("Abrir nueva pestaña...");
+  }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Mensaje recibido en content script:", request);
+  if (request.message === "open_new_tab") {
+    console.log("Abrir nueva pestaña...");
+  }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Mensaje recibido en content script:", request);
+  if (request.message === "open_new_tab") {
+    console.log("Abrir nueva pestaña...");
+  }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Mensaje recibido en content script:", request);
+  if (request.message === "open_new_tab") {
+    console.log("Abrir nueva pestaña...");
+  }
+});

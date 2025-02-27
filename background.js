@@ -17,6 +17,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return;
       }
 
+      if (!tabs || tabs.length === 0) {
+        console.warn("No active tabs found.");
+        return;
+      }
+
       chrome.tabs.sendMessage(tabs[0].id, { message: "open_new_tab" }, (response) => {
         if (chrome.runtime.lastError) {
           console.error("Error sending message to content script:", chrome.runtime.lastError);
@@ -25,5 +30,27 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
       });
     });
+  }
+});
+
+chrome.runtime.sendMessage({ message: "clicked_browser_action" });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Message received:", request);
+
+  if (request.message === "open_new_tab") {
+    console.log("Opening new tab...");
+
+    chrome.tabs.create({ url: "https://www.google.com" });
+  }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Message received:", request);
+
+  if (request.message === "open_new_tab") {
+    console.log("Opening new tab...");
+
+    chrome.tabs.create({ url: "https://www.google.com" });
   }
 });
