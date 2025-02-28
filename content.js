@@ -29,41 +29,31 @@ chrome.storage.local.get([
     jobPosts.forEach(post => {
       let text = post.innerText.toLowerCase() || post.textContent.toLowerCase();
 
-      // Filtros básicos
       let matchesCompany = company ? text.includes(company) : true;
       let matchesPosition = position ? text.includes(position) : true;
-
-      // Otros filtros
       let isEnglish = regexEnglish.test(text);
       let containsKeyword = new RegExp(`\\b${highlightKeyword}\\b`, 'i').test(text);
       let isExcludedCompany = excludeCompanies.some(c => text.includes(c));
       let isExcludedContract = excludeContractTypes.some(c => text.includes(c));
 
-      // Aplicar condiciones de exclusión
-      if (!matchesCompany || !matchesPosition) {
-        post.style.display = 'none';
-      } else if (isExcludedCompany || isExcludedContract) {
-        post.style.display = 'none';
-      } else if (isEnglish && !includeEnglish) {
+      if (!matchesCompany || !matchesPosition || isExcludedCompany || isExcludedContract || (isEnglish && !includeEnglish)) {
+        console.log("🚫 Ocultando:", text);
         post.style.display = 'none';
       } else {
-        post.style.display = ''; // Asegura que las ofertas válidas sean visibles
+        post.style.display = '';
       }
 
-      // Resaltado si contiene la palabra clave
       if (containsKeyword) {
         post.style.backgroundColor = 'yellow';
         post.style.fontWeight = 'bold';
       }
 
-      // Resaltar en verde si se permite inglés
       if (includeEnglish && isEnglish) {
         post.style.border = '2px solid green';
       }
     });
   }
 
-  // Función de debounce para evitar ejecuciones excesivas
   function debounce(func, delay) {
     let timeout;
     return function () {
@@ -72,45 +62,32 @@ chrome.storage.local.get([
     };
   }
 
-  // Observar cambios en la página y aplicar filtro
-  let observer = new MutationObserver(debounce(filterJobs, 500));
+  let observer = new MutationObserver(debounce(filterJobs, 750));
   observer.observe(document.body, { childList: true, subtree: true });
 
-  // Aplicar filtro después de cargar la página
   setTimeout(filterJobs, 2000);
 });
 
+// 📩 Un solo listener para recibir mensajes
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Mensaje recibido en content script:", request);
+  console.log("📩 Mensaje recibido:", request);
   if (request.message === "open_new_tab") {
-    console.log("Abrir nueva pestaña...");
+    console.log("🌍 Abriendo nueva pestaña...");
+    window.open("https://www.linkedin.com/jobs/", "_blank");
   }
+  sendResponse({ status: "✅ Acción procesada" });
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Mensaje recibido en content script:", request);
-  if (request.message === "open_new_tab") {
-    console.log("Abrir nueva pestaña...");
-  }
+// 📩 Enviar mensaje al background script
+chrome.runtime.sendMessage({ message: "open_new_tab" }, response => {
+  console.log("📩 Respuesta del background script:", response);
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Mensaje recibido en content script:", request);
-  if (request.message === "open_new_tab") {
-    console.log("Abrir nueva pestaña...");
-  }
-});
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Mensaje recibido en content script:", request);
-  if (request.message === "open_new_tab") {
-    console.log("Abrir nueva pestaña...");
-  }
-});
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Mensaje recibido en content script:", request);
-  if (request.message === "open_new_tab") {
-    console.log("Abrir nueva pestaña...");
-  }
+// 📩 Enviar mensaje a los tabs activos de LinkedIn
+chrome.tabs.query({ active: true, currentWindow: true, url: "*://*.linkedin.com/*" }, (tabs) => {
+  tabs.forEach(tab => {
+    chrome.tabs.sendMessage(tab.id, { message: "open_new_tab" }, response => {
+      console.log("📩 Respuesta del tab activo:", response);
+    });
+  });
 });
